@@ -58,6 +58,17 @@ def load_post_data_view(request, **kwargs):
         data.append(item)
     return JsonResponse({'data':data[lower:upper], 'size':size})
 
+def post_detail_data_view(request, pk):
+    obj = Post.objects.get(pk=pk)
+    data = {
+        'id': obj.id,
+        'title': obj.title,
+        'body': obj.body,
+        'author': obj.author.user.username,
+        'logged_in': request.user.username,
+    }
+    return JsonResponse({'data': data})
+
 def like_unlike_post(request):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         pk = request.POST.get('pk')
@@ -70,5 +81,21 @@ def like_unlike_post(request):
             obj.liked.add(request.user)
         return JsonResponse({'liked': liked, 'count': obj.like_count})
 
-def hello_world_view(request):
-    return JsonResponse({'text': 'hello world x2'})
+def update_post(request, pk):
+    obj = Post.objects.get(pk=pk)
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        new_title = request.POST.get('title')
+        new_body = request.POST.get('body')
+        obj.title = new_title
+        obj.body = new_body
+        obj.save()
+        return JsonResponse({
+            'title': new_title,
+            'body': new_body
+        })
+
+def delete_post(request, pk):
+    obj = Post.objects.get(pk=pk)
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        obj.delete()
+        return JsonResponse({})
