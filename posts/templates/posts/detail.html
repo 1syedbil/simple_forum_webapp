@@ -43,10 +43,8 @@
                     Are you sure you want to delete <b>"{{obj.title}}"</b>?
                     <form id="delete-form">
                         {% csrf_token %}
-                        {% comment %} <div class="modal-footer"> {% endcomment %}
-                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        {% comment %} </div> {% endcomment %}
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
                 </div>           
             </div>
